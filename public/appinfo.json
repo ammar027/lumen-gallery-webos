@@ -1,7 +1,7 @@
 {
-  "id": "works.partridge.frame",
+  "id": "com.ammar027.lumen.gallery",
   "version": "1.0.0",
-  "vendor": "works.partridge.frame",
+  "vendor": "ammar027",
   "type": "web",
   "main": "index.html",
   "title": "Lumen Gallery",

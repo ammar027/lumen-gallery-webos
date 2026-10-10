@@ -47,7 +47,7 @@ export function lunaCall<T extends LunaResponse = LunaResponse> (uri: string, pa
 	});
 }
 
-const LAUNCHER_ID = 'works.partridge.webos-launcher';
+const LAUNCHER_ID = 'com.ammar027.lumen';
 const HOMEBREW_EXEC = 'luna://org.webosbrew.hbchannel.service/exec';
 
 /** Back to the launcher (or close the app if the launcher is not there). */
