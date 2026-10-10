@@ -1,0 +1,22 @@
+{
+  "name": "webos-frame",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frame: an art-mode screensaver for LG webOS TVs (paintings with mattes, frames and a slideshow), webOS 6+ / Chrome 79 compatible",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "package": "sh scripts/package.sh"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@webos-tools/cli": "^3.2.6",
+    "typescript": "^7.0.2",
+    "vite": "^5.4.21"
+  },
+  "dependencies": {
+    "preact": "^10.29.8"
+  },
+  "license": "MIT"
+}

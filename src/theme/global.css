@@ -1,0 +1,64 @@
+/* Frame: a calm, dark stage for paintings. Opacity and transform only; no blur (the TV's graphics chip is weak). */
+@font-face { font-family: 'Geist Variable'; font-style: normal; font-weight: 100 900; font-display: block; src: url('../assets/geist-wght.woff2') format('woff2'); }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: #f4f2ee; font-family: 'Geist Variable', 'LG Smart UI', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; user-select: none; }
+.app, .stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; }
+.slide { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; animation: fade-in 1400ms ease-in-out both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.art { position: absolute; display: block; object-fit: contain; }
+.art--fill { object-fit: cover; }
+.mat { position: absolute; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55); }
+.bevel { position: absolute; background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0.22)); box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5); }
+
+/* frames (static gradients and shadows, drawn as a border around the whole screen) */
+.frame { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; border: 26px solid #111; box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.55), inset 0 0 34px rgba(0, 0, 0, 0.55); }
+.frame--black { border-color: #0d0d0f; }
+.frame--white { border-color: #ecebe7; box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.18), inset 0 0 30px rgba(0, 0, 0, 0.45); }
+.frame--walnut { border-color: #7a5133 #4a2c19 #36210f #623e26; }
+.frame--oak { border-color: #e2c696 #b08956 #8f6d41 #cfae7b; }
+.frame--gold { border-color: #f5df96 #b48a2c #8a661c #dcb752; }
+.frame--silver { border-color: #f4f5f7 #a3a7ae #7d8189 #d7d9de; }
+
+.tone { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: rgb(255, 214, 168); mix-blend-mode: multiply; pointer-events: none; }
+.dim { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #000; pointer-events: none; }
+
+.details { position: absolute; left: 70px; bottom: 56px; max-width: 1000px; padding: 16px 26px 18px; border-radius: 20px; background: rgba(8, 9, 12, 0.72); opacity: 0; transition: opacity 600ms ease-out; pointer-events: none; }
+.details--on { opacity: 1; }
+.details__title { font-size: 34px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; }
+.details__sub { margin-top: 6px; font-size: 26px; opacity: 0.8; }
+.miniclock { position: absolute; right: 70px; bottom: 56px; padding: 10px 24px; border-radius: 18px; background: rgba(8, 9, 12, 0.6); font-size: 36px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* settings panel */
+.panel { position: absolute; right: 50px; top: 36px; width: 640px; padding: 26px 22px 22px; border-radius: 36px; background: rgba(14, 16, 22, 0.93); box-shadow: inset 2px 2px 1.5px -1px rgba(255, 255, 255, 0.35), 0 20px 60px rgba(0, 0, 0, 0.6); z-index: 20; }
+.panel__title { margin: 0 14px 8px; font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
+.row { display: flex; flex-direction: row; align-items: center; height: 54px; margin-bottom: 2px; padding: 0 22px; border-radius: 27px; font-size: 25px; }
+.row__label { flex: 1 1 auto; font-weight: 500; }
+.row__value { flex: 0 0 auto; opacity: 0.85; }
+.row__swatch { flex: 0 0 auto; width: 30px; height: 30px; margin-right: 14px; border-radius: 15px; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55); }
+.row--info { opacity: 0.6; }
+.row--focused { background: #fff; color: #111; }
+.toast { position: absolute; left: 50%; top: 70px; transform: translateX(-50%); padding: 14px 30px; border-radius: 30px; background: rgba(8, 9, 12, 0.85); font-size: 28px; z-index: 30; }
+
+/* ---------- real-painting look: canvas weave, picture-light and varnish (static layers, no blend modes) ---------- */
+.look { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; --weave: 0.5; --vig: 0.6; }
+.look--strong { --weave: 1; --vig: 1; }
+.look::before { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: var(--weave);
+	background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0, rgba(0, 0, 0, 0.10) 1px, transparent 1px, transparent 4px), repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.09) 0, rgba(0, 0, 0, 0.09) 1px, transparent 1px, transparent 4px); }
+.look::after { content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: var(--vig);
+	background: radial-gradient(ellipse at 28% 16%, rgba(255, 246, 225, 0.13), transparent 55%), linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.05) 50%, transparent 62%), radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.42) 100%); }
+/* a deeper, more real frame: thicker moulding with a recessed lip */
+.frame::before { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; box-shadow: inset 0 0 0 var(--lw, 0px) var(--liner, transparent), inset 0 0 0 calc(var(--lw, 0px) + 3px) rgba(0, 0, 0, 0.55), inset 0 0 26px rgba(0, 0, 0, 0.5); }
+
+.panel__view { height: 860px; overflow: hidden; }
+.panel__track { transition: transform 240ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* more frame finishes: lit per side (top, right, bottom, left) like a real moulding */
+.frame--ebony { border-color: #2a2a2d #121214 #08080a #1c1c1f; }
+.frame--cherry { border-color: #9a4a34 #6a2a1d #4d1c12 #84402c; }
+.frame--antique { border-color: #c9a85a #8a6a2a #5f4719 #b08f46; }
+.frame--copper { border-color: #d98b5f #a05a36 #763d20 #c27a50; }
+
+/* mitred frame: four clipped mouldings and the recessed opening */
+.fborder { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+.fpiece, .fopening { position: absolute; }

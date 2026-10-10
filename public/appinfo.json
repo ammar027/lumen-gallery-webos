@@ -1,0 +1,18 @@
+{
+  "id": "works.partridge.frame",
+  "version": "1.0.0",
+  "vendor": "works.partridge.frame",
+  "type": "web",
+  "main": "index.html",
+  "title": "Lumen Gallery",
+  "appDescription": "Lumen Gallery, art mode: paintings with mattes and frames, a slideshow and a calm clock. Public-domain art from the Metropolitan Museum of Art.",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "bgImage": "splash.png",
+  "splashBackground": "splash.png",
+  "iconColor": "#0b0b0d",
+  "bgColor": "#000000",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true,
+  "transparent": false
+}
