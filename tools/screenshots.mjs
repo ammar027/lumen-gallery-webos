@@ -44,19 +44,29 @@ const shot = async (name) => {
 	console.log('saved', name, '-', await title());
 };
 
+const ONLY = process.argv[2];   // optional: only this scenario (landscape-walnut, shadowbox-matte, settings-panel)
+const want = (n) => !ONLY || ONLY === n;
 const base = {details: 'off', people: 'hide', shuffle: true, look: 'subtle', tone: 'off'};
 
-await open({...base, collection: 'Landscapes', matte: 'fill', frame: 'walnut', frameWidth: 'wide', liner: 'gold'});
-await shot('landscape-walnut');
+if (want('landscape-walnut')) {
+	await open({...base, collection: 'Landscapes', matte: 'fill', frame: 'walnut', frameWidth: 'medium', liner: 'none'});
+	await until(/lake|river|valley|sunset|morning|evening|autumn|harbor|coast/i);
+	await shot('landscape-walnut');
+}
 
-await open({...base, collection: 'Asian Art', matte: 'shadowbox', matteColor: 9, frame: 'ebony', frameWidth: 'medium', liner: 'none'});
-await shot('shadowbox-matte');
+if (want('shadowbox-matte')) {
+	await open({...base, collection: 'Asian Art', matte: 'shadowbox', matteColor: 9, frame: 'ebony', frameWidth: 'medium', liner: 'none'});
+	await until(/flower|butterfl|blossom|bamboo|peon|lotus|chrysanth/i, 30);
+	await shot('shadowbox-matte');
+}
 
-await open({...base, collection: 'Landscapes', matte: 'fill', frame: 'oak', frameWidth: 'medium', liner: 'none'});
-await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
-await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
-await press('enter', 1200);
-await shot('settings-panel');
+if (want('settings-panel')) {
+	await open({...base, collection: 'Landscapes', matte: 'fill', frame: 'walnut', frameWidth: 'medium', liner: 'none'});
+	await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
+	await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
+	await press('enter', 1200);
+	await shot('settings-panel');
+}
 
 ws.close();
 chrome.kill();
