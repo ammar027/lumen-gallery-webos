@@ -29,6 +29,13 @@ Made from the dev preview at 1920 x 1080 (`node tools/screenshots.mjs`).
 
 Left/Right: previous/next. Up: add to favourites. Down: show the caption. OK: settings. Back: leave. Magic Remote: click opens settings, wheel changes picture.
 
+## Easy install: download the .ipk
+
+Download `com.ammar027.lumen.gallery_1.0.0_all.ipk` from the [latest release](https://github.com/ammar027/lumen-gallery-webos/releases/latest) and install it on your TV:
+
+- **With a mouse and no command line:** open [Dev Manager Desktop](https://github.com/webosbrew/dev-manager-desktop/releases), add your TV, go to *Apps* and drop the `.ipk` onto the window.
+- **Or** with the webOS CLI: `npx -p @webos-tools/cli ares-install --device lgtv com.ammar027.lumen.gallery_1.0.0_all.ipk`.
+
 ## Build and install
 
 Needs Node 18+ and the webOS CLI (`@webos-tools/cli`).

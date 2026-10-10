@@ -3,3 +3,4 @@ dist/
 build/
 tools/logs/
 .DS_Store
+release/
