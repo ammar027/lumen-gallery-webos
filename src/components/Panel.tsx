@@ -14,6 +14,7 @@ export function buildRows (settings: Settings, options: OptionDef[], favorite: b
 		const current = choices.filter((c) => c.value === o.read(settings))[0];
 		return {key: String(o.id), label: o.label, value: current ? current.label : o.read(settings), swatch: o.id === 'matteColor' ? MATTE_COLORS[settings.matteColor].color : undefined};
 	});
+	if (settings.hidden.length) rows.push({key: 'unhide', label: 'Show hidden pictures again', value: `${settings.hidden.length} hidden`});
 	rows.push({key: 'favorite', label: favorite ? 'Remove from favourites' : 'Add to favourites', value: `${settings.favorites.length} saved`});
 	if (saverOn !== null) rows.push({key: 'saver', label: 'Use as the TV screensaver', value: saverOn ? 'On' : 'Off'});
 	rows.push({key: 'info', label: 'Collection size', value: `${count} works`});

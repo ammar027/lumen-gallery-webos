@@ -6,7 +6,9 @@ import type {Settings} from './settings';
 /** What may be shown: the chosen collection, minus works with people (unless allowed), and for the fill layout only wide pictures (so little is cropped). */
 export function pool (s: Settings): Artwork[] {
 	let list = ARTWORKS;
+	if (s.hidden.length) list = list.filter((a) => s.hidden.indexOf(a.id) === -1);
 	if (s.people === 'hide') list = list.filter((a) => !a.p);
+	if (s.animals === 'hide') list = list.filter((a) => !a.n);
 	if (s.matte === 'fill') list = list.filter((a) => a.w > 0 && a.h > 0 && a.w / a.h >= 1.25);
 	if (s.collection === 'Favorites') return list.filter((a) => s.favorites.indexOf(a.id) !== -1);
 	if (s.collection === 'All') return s.islamic === 'exclude' ? list.filter((a) => a.c !== 'Islamic Art') : list;

@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from 'preact/hooks';
 import {COLLECTIONS, type Artwork} from './config/art';
 import {Panel, buildRows} from './components/Panel';
+import {EdgeArrows, QuickBar, type BarAction} from './components/QuickBar';
 import {Stage, type Slide} from './components/Stage';
 import {exitToLauncher, isWebOS, readSaverFlag, screenOff, writeSaverFlag} from './lib/luna';
 import {imageUrl, pool, shuffled, shuffledByCollection} from './lib/playlist';
@@ -17,6 +18,12 @@ export function App () {
 	const [row, setRow] = useState(0);
 	const [details, setDetails] = useState(false);
 	const [toast, setToast] = useState('');
+	const [bar, setBar] = useState(false);
+	const [barIndex, setBarIndex] = useState(1);
+	const [edges, setEdges] = useState(false);
+	const edgeTimer = useRef(0);
+	const barRef = useRef({bar, barIndex});
+	barRef.current = {bar, barIndex};
 	const [saverOn, setSaverOn] = useState<boolean | null>(null);   // whether Frame is the TV's screensaver (null: unknown, e.g. off the TV)
 	useEffect(() => { if (isWebOS()) readSaverFlag().then(setSaverOn).catch(() => undefined); }, []);
 	const order = useRef<Artwork[]>([]);
@@ -70,7 +77,7 @@ export function App () {
 	}, [step]);
 
 	/** (re)build the playlist when the collection, the order or the favourites change */
-	const collectionKey = `${settings.collection}|${settings.shuffle}|${settings.people}|${settings.islamic}|${settings.matte === 'fill'}|${settings.collection === 'Favorites' ? settings.favorites.join(',') : ''}`;
+	const collectionKey = `${settings.collection}|${settings.shuffle}|${settings.people}|${settings.animals}|${settings.hidden.length}|${settings.islamic}|${settings.matte === 'fill'}|${settings.collection === 'Favorites' ? settings.favorites.join(',') : ''}`;
 	useEffect(() => {
 		const list = pool(settingsRef.current);
 		order.current = settingsRef.current.shuffle ? (settingsRef.current.collection === 'All' ? shuffledByCollection(list) : shuffled(list)) : list.slice();
@@ -104,6 +111,28 @@ export function App () {
 		say(has ? 'Removed from favourites' : 'Added to favourites');
 	}, [current, update, say]);
 
+	/** never show this picture again (it can be restored in the settings), and move on */
+	const hideCurrent = useCallback(() => {
+		const s = settingsRef.current;
+		if (!current || s.hidden.indexOf(current.id) !== -1) return;
+		update({...s, hidden: s.hidden.concat(current.id), favorites: s.favorites.filter((f) => f !== current.id)});
+		say('Hidden. It will not be shown again');
+	}, [current, update, say]);
+
+	const barAction = useCallback((a: BarAction) => {
+		if (a === 'prev') { step(-1); restartTimer(); }
+		else if (a === 'next') { step(1); restartTimer(); }
+		else if (a === 'like') toggleFavorite();
+		else hideCurrent();
+	}, [step, restartTimer, toggleFavorite, hideCurrent]);
+
+	/** the edge arrows follow the pointer: shown while it moves, gone a few seconds after it stops */
+	const wakeEdges = useCallback(() => {
+		setEdges(true);
+		window.clearTimeout(edgeTimer.current);
+		edgeTimer.current = window.setTimeout(() => setEdges(false), 4000);
+	}, []);
+
 	const change = useCallback((i: number, dir: number) => {
 		const def = OPTIONS[i];
 		if (!def) return;
@@ -118,11 +147,12 @@ export function App () {
 		const key = rows[i] && rows[i].key;
 		if (!key) return;
 		if (key === 'favorite') toggleFavorite();
+		else if (key === 'unhide') update({...settingsRef.current, hidden: []});
 		else if (key === 'close') setPanel(false);
 		else if (key === 'saver') { const next = !saverOn; setSaverOn(next); writeSaverFlag(next).catch(() => { setSaverOn(!next); say("Couldn't change the screensaver (it needs the Homebrew Channel)"); }); }
 		else if (key === 'exit') exitToLauncher();
 		else if (i < OPTIONS.length) change(i, 1);
-	}, [rows, toggleFavorite, change, saverOn, say]);
+	}, [rows, toggleFavorite, change, saverOn, say, update]);
 
 	// ---- remote keys and pointer
 	const keys = useRef<(e: KeyboardEvent) => void>(() => undefined);
@@ -139,10 +169,19 @@ export function App () {
 			else if (k === KEY.back || k === KEY.webosBack || k === KEY.escape) setPanel(false);
 			return;
 		}
+		if (barRef.current.bar) {
+			e.preventDefault();
+			const i = barRef.current.barIndex;
+			if (k === KEY.left) setBarIndex(Math.max(0, i - 1));
+			else if (k === KEY.right) setBarIndex(Math.min(3, i + 1));
+			else if (k === KEY.enter) barAction((['prev', 'like', 'hide', 'next'] as BarAction[])[i]);
+			else setBar(false);   // Back, Up or Down closes it
+			return;
+		}
 		if (k === KEY.left) { e.preventDefault(); step(-1); restartTimer(); }
 		else if (k === KEY.right) { e.preventDefault(); step(1); restartTimer(); }
 		else if (k === KEY.up) { e.preventDefault(); toggleFavorite(); }
-		else if (k === KEY.down) { e.preventDefault(); setDetails(true); window.clearTimeout(detailsTimer.current); detailsTimer.current = window.setTimeout(() => setDetails(false), 7000); }
+		else if (k === KEY.down) { e.preventDefault(); setBarIndex(1); setBar(true); }
 		else if (k === KEY.enter) { e.preventDefault(); setRow(0); setPanel(true); }
 		else if (k === KEY.back || k === KEY.webosBack || k === KEY.escape) { e.preventDefault(); exitToLauncher(); }
 	};
@@ -155,15 +194,20 @@ export function App () {
 			last = now;
 			step(e.deltaY > 0 ? 1 : -1); restartTimer();
 		};
+		let moved = 0;
+		const onMove = () => { const now = Date.now(); if (now - moved > 250) { moved = now; wakeEdges(); } };
 		window.addEventListener('keydown', onKey);
 		window.addEventListener('wheel', onWheel, {passive: true});
-		return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('wheel', onWheel); };
-	}, [step, restartTimer]);
+		window.addEventListener('mousemove', onMove);
+		return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('wheel', onWheel); window.removeEventListener('mousemove', onMove); };
+	}, [step, restartTimer, barAction, wakeEdges]);
 
 	return (
 		<div class="app" onClick={(e) => { if (!panel && (e.target as HTMLElement).closest('.panel') === null) { setRow(0); setPanel(true); } }}>
-			<Stage slides={slides} settings={settings} showDetails={details || panel} isFavorite={isFavorite} />
+			<Stage slides={slides} settings={settings} showDetails={details || panel || bar} isFavorite={isFavorite} />
 			{panel && <Panel rows={rows} index={row} onHover={setRow} onPress={(i) => { setRow(i); press(i); }} />}
+			<EdgeArrows visible={edges && !panel && !bar} onPrev={() => { step(-1); restartTimer(); }} onNext={() => { step(1); restartTimer(); }} />
+			<QuickBar open={bar && !panel} index={barIndex} liked={isFavorite} onHover={setBarIndex} onPress={barAction} />
 			{toast && <div class="toast">{toast}</div>}
 		</div>
 	);

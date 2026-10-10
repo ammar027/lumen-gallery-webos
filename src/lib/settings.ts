@@ -21,6 +21,10 @@ export interface Settings {
 	tone: 'off' | 'night' | 'warm';
 	/** show works that have people or faces in them (hidden by default) */
 	people: 'hide' | 'show';
+	/** show works with animals or other living creatures (hidden by default) */
+	animals: 'hide' | 'show';
+	/** pictures you chose to hide: they are never shown again (restore them in the settings) */
+	hidden: string[];
 	/** Islamic art (calligraphy, tiles, carpets ...) inside the All collection */
 	islamic: 'include' | 'exclude';
 	/** how much the picture is made to look like real paint on canvas */
@@ -35,7 +39,7 @@ export interface Settings {
 }
 
 export const DEFAULTS: Settings = {
-	collection: 'All', intervalSec: 60, shuffle: true, matte: 'fill', matteColor: 0, frame: 'walnut', frameWidth: 'medium', liner: 'none', people: 'hide', islamic: 'include', look: 'subtle', display: 'print',
+	collection: 'All', intervalSec: 60, shuffle: true, matte: 'fill', matteColor: 0, frame: 'walnut', frameWidth: 'medium', liner: 'none', people: 'hide', animals: 'hide', hidden: [], islamic: 'include', look: 'subtle', display: 'print',
 	details: 'change', clock: false, tone: 'night', dim: 0, sleepHours: 0, favorites: []
 };
 
@@ -54,7 +58,7 @@ export function loadSettings (): Settings {
 		const raw = localStorage.getItem(KEY);
 		if (!raw) return {...DEFAULTS};
 		const p = JSON.parse(raw) as Partial<Settings>;
-		return {...DEFAULTS, ...p, favorites: Array.isArray(p.favorites) ? p.favorites : []};
+		return {...DEFAULTS, ...p, favorites: Array.isArray(p.favorites) ? p.favorites : [], hidden: Array.isArray(p.hidden) ? p.hidden : []};
 	} catch {
 		return {...DEFAULTS};
 	}
@@ -88,6 +92,7 @@ export function buildOptions (collections: string[]): OptionDef[] {
 		{id: 'frameWidth', label: 'Frame width', choices: () => [['thin', 'Thin'], ['medium', 'Medium'], ['wide', 'Wide'], ['grand', 'Grand']].map(([v, l]) => ({value: v, label: l})), read: (s) => s.frameWidth, write: (s, v) => ({...s, frameWidth: v as FrameWidth})},
 		{id: 'liner', label: 'Inner liner', choices: () => [['none', 'None'], ['gold', 'Gold'], ['silver', 'Silver'], ['black', 'Black'], ['white', 'White']].map(([v, l]) => ({value: v, label: l})), read: (s) => s.liner, write: (s, v) => ({...s, liner: v as Liner})},
 		{id: 'people', label: 'People in art', choices: () => [{value: 'hide', label: 'Hide'}, {value: 'show', label: 'Show'}], read: (s) => s.people, write: (s, v) => ({...s, people: v as Settings['people']})},
+		{id: 'animals', label: 'Animals in art', choices: () => [{value: 'hide', label: 'Hide'}, {value: 'show', label: 'Show'}], read: (s) => s.animals, write: (s, v) => ({...s, animals: v as Settings['animals']})},
 		{id: 'islamic', label: 'Islamic art in All', choices: () => [{value: 'include', label: 'Include'}, {value: 'exclude', label: 'Leave out'}], read: (s) => s.islamic, write: (s, v) => ({...s, islamic: v as Settings['islamic']})},
 		{id: 'look', label: 'Painting look', choices: () => [{value: 'off', label: 'Off'}, {value: 'subtle', label: 'Subtle'}, {value: 'strong', label: 'Strong'}], read: (s) => s.look, write: (s, v) => ({...s, look: v as Settings['look']})},
 		{id: 'display', label: 'Display look', choices: () => [{value: 'screen', label: 'Screen (as it is)'}, {value: 'print', label: 'Print (matte paper)'}, {value: 'gallery', label: 'Gallery (dim, soft light)'}], read: (s) => s.display, write: (s, v) => ({...s, display: v as Settings['display']})},

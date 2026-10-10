@@ -21,13 +21,15 @@ Made from the dev preview at 1920 x 1080 (`node tools/screenshots.mjs`).
 - **Look:** fill the screen or keep the whole picture; mattes (modern, wide, flexible, shadowbox) in 16 colours; 10 frame finishes (real wood and metal photo textures),
   4 widths and an inner liner; a canvas-weave and picture-light "real painting" effect; warmer tone at night; dimming; clock; caption with credit.
 - **Not an LCD look:** a "Display look" setting (Screen, Print, Gallery) makes the TV read like paint lit by a room: blacks are lifted a little, whites are softened to paper white, and the light falls off from the top left, since an even glow and pure blacks are what give a screen away.
+- **Animals in art:** also hidden by default (works whose title or description mentions an animal, bird, fish, insect or other creature). It is a text-based filter, so a picture can slip through: press Down, then **Hide**, and that picture is never shown again (*Show hidden pictures again* in the settings brings them back).
+- **Quick actions:** press Down for Previous, Like / Unlike, Hide and Next; Left and Right change the picture; with the Magic Remote, arrows appear at the left and right edges.
 - **Slideshow:** 15 seconds to a day, shuffle or in order, collections, favourites.
 - **As the TV screensaver:** with the TV-side watcher from [Lumen](https://github.com/ammar027/lumen-webos) (`tools/tv/watch.sh`) and a flag file, Lumen Gallery
   takes over when the TV's screensaver would start. It can be switched in the app's settings.
 
 ## Keys
 
-Left/Right: previous/next. Up: add to favourites. Down: show the caption. OK: settings. Back: leave. Magic Remote: click opens settings, wheel changes picture.
+Left/Right: previous/next. Up: like or unlike. Down: quick actions (Previous, Like/Unlike, Hide, Next). OK: settings. Back: leave. Magic Remote: click opens settings, wheel changes picture.
 
 ## Easy install: download the .ipk
 

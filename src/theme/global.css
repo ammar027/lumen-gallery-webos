@@ -74,3 +74,18 @@ html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hid
 .room { background: radial-gradient(ellipse 85% 95% at 24% 6%, rgba(255, 244, 222, 0.07) 0%, rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.36) 100%); }
 .lift { background: rgb(236, 228, 212); }
 .soften { background: #000; }
+
+/* ---------- quick actions bar and edge arrows ---------- */
+.qbar { position: absolute; left: 0; width: 1920px; bottom: 90px; display: flex; flex-direction: row; justify-content: center; z-index: 15; }
+.qbar__item { display: flex; flex-direction: column; align-items: center; width: 150px; margin: 0 14px; }
+.qbar__circle { width: 96px; height: 96px; border-radius: 48px; display: flex; align-items: center; justify-content: center; background: rgba(10, 11, 15, 0.72); box-shadow: inset 2px 2px 1.5px -1px rgba(255, 255, 255, 0.4), 0 8px 22px rgba(0, 0, 0, 0.45); }
+.qbar__circle svg, .edge svg { width: 44px; height: 44px; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.qbar__label { margin-top: 12px; font-size: 24px; font-weight: 500; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9); }
+.qbar__item--focused .qbar__circle { background: #fff; transform: scale(1.12); }
+.qbar__item--focused .qbar__circle svg { stroke: #111; }
+.edge { position: absolute; top: 450px; width: 100px; height: 180px; display: flex; align-items: center; justify-content: center; border-radius: 50px; background: rgba(10, 11, 15, 0.55); opacity: 0; transition: opacity 250ms ease-out; z-index: 12; pointer-events: none; }
+.edge--left { left: 36px; }
+.edge--right { right: 36px; }
+.edge--on { opacity: 1; pointer-events: auto; }
+.edge:hover { background: rgba(255, 255, 255, 0.85); }
+.edge:hover svg { stroke: #111; }
