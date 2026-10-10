@@ -33,15 +33,18 @@ export function Stage ({slides, settings, showDetails, isFavorite}: Props) {
 		<div class="stage" style={`background:${wall}`}>
 			{slides.map((s) => {
 				const box = pictureBox(settings.matte, s.aspect);
+				const matted = settings.matte !== 'fill' && settings.matte !== 'none';
 				return (
 					<div class="slide" key={s.key}>
 						{settings.matte === 'flexible' && <div class="mat" style={`${css(grow(box, 96))};background:${MATTE_COLORS[settings.matteColor].color}`} />}
-						{settings.matte === 'shadowbox' && <div class="bevel" style={css(grow(box, 16))} />}
+						{matted && <div class="paper" />}
+						{matted && <div class={`core${settings.matte === 'shadowbox' ? ' core--deep' : ''}`} style={css(grow(box, settings.matte === 'shadowbox' ? 10 : 5))} />}
 						<img class={`art${settings.matte === 'fill' ? ' art--fill' : ''}`} src={s.src} alt="" style={css(box)} />
+						{settings.look !== 'off' && <div class={`look look--${settings.look}`} style={css(box)} />}
+						{matted && <div class={`artshadow${settings.matte === 'shadowbox' ? ' artshadow--deep' : ''}`} style={css(box)} />}
 					</div>
 				);
 			})}
-			{settings.look !== 'off' && <div class={`look look--${settings.look}`} />}
 			{settings.frame !== 'none' && <FrameBorder style={settings.frame} width={FRAME_WIDTH[settings.frameWidth]} liner={settings.liner} />}
 			{warm && <div class="tone" />}
 			{settings.dim > 0 && <div class="dim" style={`opacity:${settings.dim / 100}`} />}
