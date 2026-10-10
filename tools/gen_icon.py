@@ -23,13 +23,4 @@ for size, name in ((130, 'largeIcon.png'), (80, 'icon.png')):
     subprocess.run(['sips', '-z', str(size), str(size), master, '--out', f'{OUT}/{name}'], capture_output=True)
     print(name, os.path.getsize(f'{OUT}/{name}') // 1024, 'KB')
 
-body = re.search(r'<div class="i">.*</div>\s*$', ART, re.S).group(0)
-style = re.search(r'<style>(.*?)</style>', ART, re.S).group(1)
-FONT64 = base64.b64encode(open(FONT, 'rb').read()).decode()
-splash = f'''<!doctype html><meta charset="utf-8"><style>@font-face{{font-family:G;font-weight:100 900;font-display:block;src:url(data:font/woff2;base64,{FONT64}) format("woff2")}}{style}
-html,body{{width:1920px;height:1080px}}body{{background:radial-gradient(120% 100% at 50% 6%,#3a2e29 0%,#1c1512 55%,#0a0706 100%);position:relative}}
-.w{{position:absolute;left:760px;top:250px;width:1024px;height:1024px;transform:scale(.390625);transform-origin:0 0;border-radius:230px;overflow:hidden;box-shadow:0 0 0 2px rgba(255,255,255,.1)}}
-.t{{position:absolute;left:0;width:1920px;top:690px;text-align:center;color:#f4f2ee;font:600 84px G,sans-serif;letter-spacing:-.01em}}</style>
-<div class="w">{body}</div><div class="t">{NAME}</div>'''
-shot(splash, 1920, 1080, f'{OUT}/splash.png')
-print('splash.png', os.path.getsize(f'{OUT}/splash.png') // 1024, 'KB')
+# No launch screen: Lumen Gallery is a screensaver and should come up at once, so appinfo.json has no bgImage/splashBackground (only the black bgColor).
