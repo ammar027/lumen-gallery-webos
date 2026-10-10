@@ -3,6 +3,14 @@
 An art-mode screensaver for LG webOS TVs, like the art mode on Samsung's The Frame: paintings and Islamic art shown full screen in a real-looking
 frame, with a slideshow. Companion to [Lumen](https://github.com/ammar027/lumen-webos), the launcher.
 
+## Screenshots
+
+Made from the dev preview at 1920 x 1080 (`node tools/screenshots.mjs`).
+
+![A landscape filling the screen in a walnut frame with a gold liner](docs/screenshots/landscape-walnut.jpg)
+![A flower painting on a sage shadowbox matte in an ebony frame](docs/screenshots/shadowbox-matte.jpg)
+![The settings panel over a landscape in an oak frame](docs/screenshots/settings-panel.jpg)
+
 ## Features
 
 - **Pictures:** about 7,000 public-domain works: European and American paintings, Asian paintings and prints (Cleveland Museum of Art, CC0) and Islamic art,
