@@ -7,7 +7,7 @@
 - Pictures are resized on the way to the TV by [images.weserv.nl](https://images.weserv.nl).
 
 ## Frame textures
-Wood and metal textures from [ambientCG](https://ambientcg.com) (Wood008, Wood049, Wood051, Wood067, Metal007, Metal047B, Metal049A), CC0, in `public/textures/`.
+Wood, metal, fabric and paper textures from [ambientCG](https://ambientcg.com) (Wood008, Wood049, Wood051, Wood067, Metal007, Metal047B, Metal049A, Fabric061 for the canvas weave, Paper003 for the mat board), CC0, in `public/textures/`. The canvas and paper files are black with the texture as transparency.
 
 ## Software and fonts
 - [Preact](https://preactjs.com), MIT, © Jason Miller.

@@ -68,3 +68,9 @@ html, body { margin: 0; padding: 0; width: 1920px; height: 1080px; overflow: hid
 .core--deep { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2), 0 9px 26px rgba(0, 0, 0, 0.55); }
 .artshadow { position: absolute; pointer-events: none; box-shadow: inset 3px 5px 10px rgba(0, 0, 0, 0.36), inset -1px -2px 5px rgba(0, 0, 0, 0.12); }
 .artshadow--deep { box-shadow: inset 8px 11px 22px rgba(0, 0, 0, 0.5), inset -3px -4px 10px rgba(0, 0, 0, 0.2); }
+
+/* display look: fall-off of the room light, lifted blacks, softened whites */
+.room, .lift, .soften { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+.room { background: radial-gradient(ellipse 85% 95% at 24% 6%, rgba(255, 244, 222, 0.07) 0%, rgba(0, 0, 0, 0) 38%, rgba(0, 0, 0, 0.36) 100%); }
+.lift { background: rgb(236, 228, 212); }
+.soften { background: #000; }

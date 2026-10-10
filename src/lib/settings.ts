@@ -25,6 +25,8 @@ export interface Settings {
 	islamic: 'include' | 'exclude';
 	/** how much the picture is made to look like real paint on canvas */
 	look: 'off' | 'subtle' | 'strong';
+	/** how the screen is made to look like lit paint or paper instead of a lit screen */
+	display: 'screen' | 'print' | 'gallery';
 	/** extra darkening, percent */
 	dim: number;
 	/** turn the screen off after this many hours (0 = never) */
@@ -33,7 +35,7 @@ export interface Settings {
 }
 
 export const DEFAULTS: Settings = {
-	collection: 'All', intervalSec: 60, shuffle: true, matte: 'fill', matteColor: 0, frame: 'walnut', frameWidth: 'medium', liner: 'none', people: 'hide', islamic: 'include', look: 'subtle',
+	collection: 'All', intervalSec: 60, shuffle: true, matte: 'fill', matteColor: 0, frame: 'walnut', frameWidth: 'medium', liner: 'none', people: 'hide', islamic: 'include', look: 'subtle', display: 'print',
 	details: 'change', clock: false, tone: 'night', dim: 0, sleepHours: 0, favorites: []
 };
 
@@ -88,6 +90,7 @@ export function buildOptions (collections: string[]): OptionDef[] {
 		{id: 'people', label: 'People in art', choices: () => [{value: 'hide', label: 'Hide'}, {value: 'show', label: 'Show'}], read: (s) => s.people, write: (s, v) => ({...s, people: v as Settings['people']})},
 		{id: 'islamic', label: 'Islamic art in All', choices: () => [{value: 'include', label: 'Include'}, {value: 'exclude', label: 'Leave out'}], read: (s) => s.islamic, write: (s, v) => ({...s, islamic: v as Settings['islamic']})},
 		{id: 'look', label: 'Painting look', choices: () => [{value: 'off', label: 'Off'}, {value: 'subtle', label: 'Subtle'}, {value: 'strong', label: 'Strong'}], read: (s) => s.look, write: (s, v) => ({...s, look: v as Settings['look']})},
+		{id: 'display', label: 'Display look', choices: () => [{value: 'screen', label: 'Screen (as it is)'}, {value: 'print', label: 'Print (matte paper)'}, {value: 'gallery', label: 'Gallery (dim, soft light)'}], read: (s) => s.display, write: (s, v) => ({...s, display: v as Settings['display']})},
 		{id: 'details', label: 'Details', choices: () => [{value: 'change', label: 'When it changes'}, {value: 'always', label: 'Always'}, {value: 'off', label: 'Off'}], read: (s) => s.details, write: (s, v) => ({...s, details: v as Settings['details']})},
 		{id: 'clock', label: 'Clock', choices: () => [{value: 'false', label: 'Off'}, {value: 'true', label: 'On'}], read: (s) => String(s.clock), write: (s, v) => ({...s, clock: v === 'true'})},
 		{id: 'tone', label: 'Colour tone', choices: () => [{value: 'off', label: 'Off'}, {value: 'night', label: 'Warmer at night'}, {value: 'warm', label: 'Always warm'}], read: (s) => s.tone, write: (s, v) => ({...s, tone: v as Settings['tone']})},

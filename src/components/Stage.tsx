@@ -46,6 +46,7 @@ export function Stage ({slides, settings, showDetails, isFavorite}: Props) {
 				);
 			})}
 			{settings.frame !== 'none' && <FrameBorder style={settings.frame} width={FRAME_WIDTH[settings.frameWidth]} liner={settings.liner} />}
+			{settings.display !== 'screen' && <RoomLight mode={settings.display} />}
 			{warm && <div class="tone" />}
 			{settings.dim > 0 && <div class="dim" style={`opacity:${settings.dim / 100}`} />}
 			{top && <Details art={top.art} visible={settings.details === 'always' || (settings.details === 'change' && showDetails)} favorite={isFavorite} />}
@@ -67,4 +68,17 @@ function MiniClock () {
 	const [now, setNow] = useState(new Date());
 	useEffect(() => { const id = window.setInterval(() => setNow(new Date()), 20000); return () => window.clearInterval(id); }, []);
 	return <div class="miniclock">{now.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}</div>;
+}
+
+/** What makes a screen look like an LCD is that it glows evenly, has pure blacks and brilliant whites. Real paint reflects a room's light: blacks are never black, whites are
+ *  paper white, and the light falls off across the wall. Three static layers fake that: a darkening for the whites, a pale veil that lifts the blacks, and a light fall-off from the top left. */
+function RoomLight ({mode}: {mode: 'print' | 'gallery'}) {
+	const g = mode === 'gallery';
+	return (
+		<>
+			<div class="room" style={`opacity:${g ? 1 : 0.62}`} />
+			<div class="lift" style={`opacity:${g ? 0.11 : 0.07}`} />
+			<div class="soften" style={`opacity:${g ? 0.20 : 0.10}`} />
+		</>
+	);
 }

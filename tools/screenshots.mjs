@@ -45,7 +45,7 @@ const shot = async (name) => {
 };
 
 const ONLY = process.argv[2];   // optional: only this scenario (landscape-walnut, shadowbox-matte, settings-panel)
-const want = (n) => !ONLY || ONLY === n;
+const want = (n) => (!ONLY && n !== 'display-look') || ONLY === n;
 const base = {details: 'off', people: 'hide', shuffle: true, look: 'subtle', tone: 'off'};
 
 if (want('landscape-walnut')) {
@@ -66,6 +66,14 @@ if (want('settings-panel')) {
 	await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
 	await press('enter', 1200);
 	await shot('settings-panel');
+}
+
+if (want('display-look')) {
+	// the same picture three ways: a screen as it is, and the two print-like looks
+	for (const display of ['screen', 'print', 'gallery']) {
+		await open({...base, collection: 'Landscapes', shuffle: false, matte: 'fill', frame: 'walnut', frameWidth: 'medium', liner: 'none', display});
+		await shot('display-' + display);
+	}
 }
 
 ws.close();
