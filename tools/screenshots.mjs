@@ -60,6 +60,18 @@ if (want('shadowbox-matte')) {
 	await shot('shadowbox-matte');
 }
 
+if (want('islamic-art')) {
+	await open({...base, collection: 'Islamic Art', matte: 'wide', matteColor: 2, frame: 'ebony', frameWidth: 'medium', liner: 'none'});
+	await until(/tile|ornament|geometr|calligraph|dome|carpet|mosque|quran|manuscript/i, 30);
+	await shot('islamic-art');
+}
+
+if (want('sea-oak')) {
+	await open({...base, collection: 'Seascapes', matte: 'fill', frame: 'oak', frameWidth: 'medium', liner: 'none'});
+	await until(/sea|coast|harbor|ocean|beach|waves|shore/i);
+	await shot('sea-oak');
+}
+
 if (want('settings-panel')) {
 	await open({...base, collection: 'Landscapes', matte: 'fill', frame: 'walnut', frameWidth: 'medium', liner: 'none'});
 	await until(/lake|river|mountain|sunset|forest|valley|coast|sea|cloud|morning|evening/i);
